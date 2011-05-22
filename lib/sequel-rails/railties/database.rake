@@ -110,8 +110,7 @@ namespace :db do
 
   desc 'Rolls the schema back to the previous version. Specify the number of steps with STEP=n'
   task :rollback => :'migrate:load' do
-    step = ENV['STEP'] ? ENV['STEP'].to_i : 1
-    Sequel::Migrator.rollback('db/migrate/', step)
+    Rails::Sequel::Migrations.migrate_down!
     Rake::Task["db:schema:dump"].invoke if Rails.env != 'test'
   end
 
