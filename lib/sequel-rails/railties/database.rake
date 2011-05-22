@@ -34,7 +34,7 @@ namespace :db do
   end
 
   desc "Create the database defined in config/database.yml for the current Rails.env - also creates the test database if Rails.env.development?"
-  task :create, :env => :environment do |t, args|
+  task :create, [:env] => :environment do |t, args|
     args.with_defaults(:env => Rails.env)
     
     require 'sequel-rails/storage'
