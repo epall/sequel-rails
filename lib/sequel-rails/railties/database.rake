@@ -1,4 +1,12 @@
 # TODO: DRY these up
+task :sequel_env do
+  Rails.application.initializers.each do |initializer|
+    if initializer.name =~ /^sequel\.\w+/
+      initializer.run(Rails.application)
+    end
+  end
+end
+
 namespace :db do
   namespace :schema do
     desc "Create a db/schema.rb file that can be portably used against any DB supported by Sequel"
@@ -12,7 +20,7 @@ namespace :db do
     end
     
     desc "Load a schema.rb file into the database"
-    task :load => :environment do
+    task :load => :sequel_env do
       require 'sequel-rails/storage'
       Rails::Sequel::Storage.new(Rails.env).create
       
@@ -27,14 +35,14 @@ namespace :db do
 
   namespace :create do
     desc 'Create all the local databases defined in config/database.yml'
-    task :all => :environment do
+    task :all => :sequel_env do
       require 'sequel-rails/storage'
       Rails::Sequel::Storage.create_all
     end
   end
 
   desc "Create the database defined in config/database.yml for the current Rails.env - also creates the test database if Rails.env.development?"
-  task :create, [:env] => :environment do |t, args|
+  task :create, [:env] => :sequel_env do |t, args|
     args.with_defaults(:env => Rails.env)
     
     require 'sequel-rails/storage'
@@ -47,14 +55,14 @@ namespace :db do
   
   namespace :drop do
     desc 'Drops all the local databases defined in config/database.yml'
-    task :all => [:environment] do
+    task :all => [:sequel_env] do
       require 'sequel-rails/storage'
       Rails::Sequel::Storage.drop_all
     end
   end
   
   desc "Create the database defined in config/database.yml for the current Rails.env - also creates the test database if Rails.env.development?"
-  task :drop, [:env] => :environment do |t, args|
+  task :drop, [:env] => :sequel_env do |t, args|
     args.with_defaults(:env => Rails.env)
     
     require 'sequel-rails/storage'
@@ -66,7 +74,7 @@ namespace :db do
   end
 
   namespace :migrate do
-    task :load => :environment do
+    task :load => :sequel_env do
       require 'sequel-rails/migrations'
     end
 
@@ -122,7 +130,7 @@ namespace :db do
   end
   
   desc 'Load the seed data from db/seeds.rb'
-  task :seed => :environment do
+  task :seed => :sequel_env do
     seed_file = File.join(Rails.root, 'db', 'seeds.rb')
     load(seed_file) if File.exist?(seed_file)
   end
