@@ -2,12 +2,12 @@
 require "date"
 
 Gem::Specification.new do |s|
-  s.name          = %q{fredwu-sequel-rails}
+  s.name          = %q{sequel-rails}
   s.version       = "0.2.0"
   s.date          = Date.today.to_s
-  s.authors       = ["Brasten Sager (brasten)", "Fred Wu"]
-  s.email         = %q{brasten@gmail.com, ifredwu@gmail.com}
-  s.homepage      = %q{http://github.com/fredwu/sequel-rails}
+  s.authors       = ["Brasten Sager (brasten)", "Fred Wu", "Eric Allen"]
+  s.email         = %q{brasten@gmail.com, ifredwu@gmail.com, eric@hackerengineer.net}
+  s.homepage      = %q{http://github.com/epall/sequel-rails}
   s.summary       = %q{Integrate Sequel with Rails 3}
   s.description   = %q{Integrate Sequel with Rails 3}
   s.rdoc_options  = ["--charset=UTF-8"]
